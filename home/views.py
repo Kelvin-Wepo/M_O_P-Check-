@@ -185,3 +185,15 @@ def complete_profile(request):
         return redirect('dashboard')
     return render(request, 'profile.html', {'user_name': request.user.first_name + " " + request.user.last_name})
 
+@login_required
+def user_dashboard(request):
+    try:
+        user_profile = UserProfile.objects.get(user=request.user)
+    except UserProfile.DoesNotExist:
+        user_profile = None
+
+    return render(request, 'user_dashboard.html', {'user_name': request.user.first_name + " " + request.user.last_name, 
+                                                'user_profile': user_profile, 
+                                                'user_username': request.user.username
+                                                })
+
