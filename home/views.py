@@ -465,3 +465,10 @@ def report(request):
     
     return render(request, 'report.html', {'user_info': user_info, 'attributes_values': attributes_values, 'user_name': request.user.first_name + " " + request.user.last_name})
 
+
+@login_required
+def test_history(request):
+    user_medical_history = userHistory.objects.filter(user=request.user)
+    return render(request, 'test_history.html', {'user_name': request.user.first_name + " " + request.user.last_name,
+                                                'user_medical_history': user_medical_history})
+
