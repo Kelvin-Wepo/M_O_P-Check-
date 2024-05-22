@@ -107,3 +107,16 @@ class obesityDisorder(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     activityLevel = models.CharField(max_length = 10, choices = (('1', '1'), ('2', '2'), ('3', '3'), ('4', '4')))
     
+class ObesityData(models.Model):
+    age = models.IntegerField()
+    gender = models.CharField(max_length = 6)
+    height = models.FloatField()
+    weight = models.FloatField()
+    bmi = models.FloatField()
+    activityLevel = models.FloatField()
+    ObesityCategory = models.CharField(max_length = 20)
+    
+    def __str__(self) -> str:
+        return self.ObesityCategory
+
+
