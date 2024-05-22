@@ -303,3 +303,107 @@ def mental_disorder(request):
 obesity_encoder = joblib.load('static/encoders/obesity_encoder.pkl')
 obesity_output_encoder = joblib.load('static/encoders/obesity_output_encoder.pkl')
 obesity_model = joblib.load('static/models/obesity_prediction.pkl')
+
+@login_required
+def obesity(request):
+    user_data = UserProfile.objects.get(user=request.user)
+    weight, height, bmi, gender = user_data.weight, user_data.height, user_data.bmi, user_data.gender.capitalize()
+    age = date.today().year - user_data.dob.year - ((date.today().month, date.today().day) < (user_data.dob.month, user_data.dob.day))
+    
+    if request.method == 'POST':
+        
+        form = obesityDisorderForm(request.POST)
+        if form.is_valid():
+            activityLevel = form.cleaned_data['activityLevel']
+            
+            new_data = [[age, gender, height, weight, bmi, int(activityLevel)]]
+            new_data[0][1] = obesity_encoder.transform(np.array(new_data[0][1]).reshape(-1, 1))[0][0]
+            predicted_data = obesity_model.predict(new_data)
+            predicted_output = obesity_output_encoder.inverse_transform((np.array(predicted_data)).reshape(-1, 1))[0][0]
+            
+            symp = [int(activityLevel)]
+            
+            my_instance = userHistory(
+                user=request.user,
+                test_type='Obesity Test',
+                symptoms=json.dumps(symp),
+                result=predicted_output,
+                date=timezone.now()
+            )
+            my_instance.save()
+            
+            return render(request, 'obesity.html', {'age': age, 'user_data': user_data, 'form': form, 'prediction_result': predicted_output, 'user_name': request.user.first_name + " " + request.user.last_name})
+    else:
+        form = obesityDisorderForm()
+
+    return render(request, 'obesity.html', {'age': age, 'user_data': user_data, 'form': form, 'user_name': request.user.first_name + " " + request.user.last_name})
+
+@login_required
+def pcos(request):
+    user_data = UserProfile.objects.get(user=request.user)
+    print(user_data, user_data.dob, user_data.weight, user_data.height)
+    age = date.today().year - user_data.dob.year - ((date.today().month, date.today().day) < (user_data.dob.month, user_data.dob.day))
+    
+    if request.method == 'POST':
+        form = pcosDisorderForm(request.POST)
+        if form.is_valid():
+            # Retrieve user-entered data from the form
+            period_frequency = form.cleaned_data['period_frequency']
+            gained_weight = form.cleaned_data['gained_weight']
+            body_hair_growth = form.cleaned_data['body_hair_growth']
+            skin_dark = form.cleaned_data['skin_dark']
+            hair_problem = form.cleaned_data['hair_problem']
+            pimples = form.cleaned_data['pimples']
+            fast_food = form.cleaned_data['fast_food']
+            exercise = form.cleaned_data['exercise']
+            mood_swing = form.cleaned_data['mood_swing']
+            mentrual_regularity = form.cleaned_data['mentrual_regularity']
+            duration = form.cleaned_data['duration']
+            blood_grp = form.cleaned_data['blood_grp']
+            
+            new_data = [[age, user_data.weight, user_data.height, period_frequency, int(gained_weight),
+                        int(body_hair_growth), int(skin_dark), int(hair_problem),
+                        int(pimples), int(fast_food), int(exercise), int(mood_swing),
+                        int(mentrual_regularity), int(duration), int(blood_grp)]]
+            
+            prediction_result = pcos_model.predict(new_data)[0]
+            
+            print(prediction_result)
+            
+            if prediction_result == 1:
+                prediction_result = 'PCOS Positive'
+            else:
+                prediction_result = 'PCOS Negative'
+            
+            print(prediction_result)
+            
+            ch = {1: "YES", 0: "NO"}
+            blood_group = {11: 'A+',
+                            12: 'A-',
+                            13: 'B+',
+                            14: 'B-',
+                            15: 'O+',
+                            16: 'O-',
+                            17: 'AB+',
+                            18: 'AB-'}
+            
+            symp = [period_frequency, ch[int(gained_weight)],
+                        ch[int(body_hair_growth)], ch[int(skin_dark)], ch[int(hair_problem)],
+                        ch[int(pimples)], ch[int(fast_food)], ch[int(exercise)], ch[int(mood_swing)],
+                        ch[int(mentrual_regularity)], int(duration), blood_group[int(blood_grp)]]
+            
+            my_instance = userHistory(
+                user=request.user,
+                test_type='PCOS Test',
+                symptoms=json.dumps(symp),  # Convert list to JSON string
+                result=prediction_result,  # Set result as needed
+                date=timezone.now()  # Set current date and time
+            )
+            my_instance.save()
+
+            return render(request, 'pcos.html', {'age': age, 'height': user_data.height, 'weight': user_data.weight,  'form': form, 'prediction_result': prediction_result, 'user_name': request.user.first_name + " " + request.user.last_name})
+    else:
+        form = pcosDisorderForm()
+    return render(request, 'pcos.html', {'age': age, 'height': user_data.height, 'weight': user_data.weight, 'form': form, 'user_name': request.user.first_name + " " + request.user.last_name})
+
+
