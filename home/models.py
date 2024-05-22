@@ -103,3 +103,7 @@ class pcosDisorder(models.Model):
     blood_grp = models.CharField(max_length=100, choices=BLOOD_GROUP_CHOICES)
 
 
+class obesityDisorder(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    activityLevel = models.CharField(max_length = 10, choices = (('1', '1'), ('2', '2'), ('3', '3'), ('4', '4')))
+    
