@@ -157,4 +157,12 @@ class DoctorUser(AbstractUser):
     USERNAME_FIELD = 'username'
     
     
+class AppointmentData(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    doctor = models.ForeignKey(DoctorUser, on_delete=models.CASCADE)
+    email = models.CharField(max_length=150)
+    phone = models.CharField(max_length = 20)
+    appointmentDate = models.DateTimeField()
+    message = models.CharField(max_length = 1000)
+    status = models.CharField(max_length = 50, default = "Pending")
 
