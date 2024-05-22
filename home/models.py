@@ -26,3 +26,7 @@ class userHistory(models.Model):
     def get_symptoms(self):
         return json.loads(self.symptoms)
 
+class Appointment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    appointment_date = models.DateTimeField()
+
