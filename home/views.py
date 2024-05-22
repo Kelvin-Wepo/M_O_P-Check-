@@ -197,3 +197,9 @@ def user_dashboard(request):
                                                 'user_username': request.user.username
                                                 })
 
+@login_required
+def doctor_dashboard(request):
+    doctor_detail = DoctorUser.objects.get(username = request.user)
+    return render(request, 'doctor_dashboard.html', {'doctor': doctor_detail, 'user_name': request.user.first_name + " " + request.user.last_name})
+
+
