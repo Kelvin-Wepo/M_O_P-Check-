@@ -119,3 +119,20 @@ def register(request):
     return render(request, 'register.html', {'form': form})
 
 
+def doctor_register(request):
+    if request.method == 'POST':
+        form = DoctorRegistrationForm(request.POST)
+        form2 = UserRegistrationForm(request.POST)
+        
+        try:
+            if form.is_valid():
+                form.save()
+                form2.save()
+                return redirect('doctor_login')
+        except:
+            form = DoctorRegistrationForm()
+            messages.error(request, "Something went wrong. Try again!")
+    else:
+        form = DoctorRegistrationForm()
+    return render(request, 'doctor_register.html', {'form': form})
+
