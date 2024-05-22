@@ -234,3 +234,10 @@ def update_status(request, appointment_id):
     appointment.save()
     return redirect('appointmentRequest')
 
+@login_required
+def appointmentRequest(request):
+    doctor = DoctorUser.objects.get(username=request.user.username)
+    appointment = AppointmentData.objects.filter(doctor=doctor, status='Pending')
+    print(appointment)
+    return render(request, 'appointment_request.html', {'user_name': request.user.first_name + " " + request.user.last_name, 'appointment': appointment})
+
