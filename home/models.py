@@ -120,3 +120,41 @@ class ObesityData(models.Model):
         return self.ObesityCategory
 
 
+class DoctorUser(AbstractUser):
+    phone = models.CharField(max_length=20)
+    specialization = models.CharField(max_length=100)
+    hospital = models.CharField(max_length=255)
+    city = models.CharField(max_length=100)
+    state = models.CharField(max_length=100)
+    country = models.CharField(max_length=100)
+    about = models.CharField(max_length=1000)
+    education = models.CharField(max_length=1000)
+    experience = models.CharField(max_length=1000)
+    languages = models.CharField(max_length=1000)
+    expertise = models.CharField(max_length=1000)
+
+    class Meta:
+        db_table = 'doctor_user'
+
+    groups = models.ManyToManyField(
+        Group,
+        verbose_name=_('groups'),
+        blank=True,
+        related_name='doctor_users',
+        help_text=_('The groups this user belongs to. A user will get all permissions granted to each of their groups.'),
+        related_query_name='doctor_user',
+    )
+
+    user_permissions = models.ManyToManyField(
+        Permission,
+        verbose_name=_('user permissions'),
+        blank=True,
+        related_name='doctor_users',
+        help_text=_('Specific permissions for this user.'),
+        related_query_name='doctor_user',
+    )
+    
+    USERNAME_FIELD = 'username'
+    
+    
+
