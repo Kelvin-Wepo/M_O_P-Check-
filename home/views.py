@@ -223,3 +223,8 @@ def fix_appointment(request):
             return redirect('appointmentHistory')
     return render(request, 'fix_appointment.html', {'form': form, 'user_name': request.user.first_name + " " + request.user.last_name, 'doctors': doctors})
 
+@login_required
+def appointmentHistory(request):
+    appointment = AppointmentData.objects.filter(user=request.user)
+    return render(request, 'appointment_history.html', {'user_name': request.user.first_name + " " + request.user.last_name, 'appointment': appointment})
+
