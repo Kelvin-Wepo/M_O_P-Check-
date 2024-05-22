@@ -472,3 +472,11 @@ def test_history(request):
     return render(request, 'test_history.html', {'user_name': request.user.first_name + " " + request.user.last_name,
                                                 'user_medical_history': user_medical_history})
 
+@login_required
+def download_receipt(request):
+    receipt = Receipt.objects.get(user=request.user)
+    # Logic to generate/download receipt file
+    return redirect('dashboard')  # Redirect to dashboard or any other page
+
+
+
