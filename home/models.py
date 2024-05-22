@@ -30,3 +30,7 @@ class Appointment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     appointment_date = models.DateTimeField()
 
+class Receipt(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    receipt_file = models.FileField(upload_to='receipts/')
+
