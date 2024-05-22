@@ -136,3 +136,16 @@ def doctor_register(request):
         form = DoctorRegistrationForm()
     return render(request, 'doctor_register.html', {'form': form})
 
+def user_login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('profile')
+        else:
+            messages.error(request, "Something went wrong. Try again!")
+    return render(request, 'login.html')
+
+
