@@ -207,3 +207,19 @@ def doctor_dashboard(request):
 def health_prediction(request):
     return render(request, 'health_test.html', {'user_name': request.user.first_name + " " + request.user.last_name})
 
+@login_required
+def fix_appointment(request):
+    form = AppointmentDataForm()
+    doctors = DoctorUser.objects.all()
+    if request.method == 'POST':
+        form = AppointmentDataForm(request.POST)
+        if form.is_valid():
+            appointment = form.save(commit=False)
+            appointment.user = request.user
+            doctor_id = request.POST.get('doctor')
+            doctor = DoctorUser.objects.get(id=doctor_id)
+            appointment.doctor = doctor
+            appointment.save()
+            return redirect('appointmentHistory')
+    return render(request, 'fix_appointment.html', {'form': form, 'user_name': request.user.first_name + " " + request.user.last_name, 'doctors': doctors})
+
