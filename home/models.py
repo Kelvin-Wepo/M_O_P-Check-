@@ -49,3 +49,30 @@ class UserProfile(models.Model):
         return None
 
 
+class mentalDisorder(models.Model):
+    
+    choices_dict = {}
+    for column in mental_disorder_df.columns:
+        unique_values = mental_disorder_df[column].unique()
+        choices = [(val, val) for val in unique_values]
+        choices_dict[column] = choices
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    sadness = models.CharField(max_length=100, choices=choices_dict['Sadness'])
+    euphoric = models.CharField(max_length=100, choices=choices_dict['Euphoric'])
+    exhausted = models.CharField(max_length=100, choices=choices_dict['Exhausted'])
+    sleep_disorder = models.CharField(max_length=100, choices=choices_dict['Sleep dissorder'])
+    mood_swing = models.CharField(max_length=100, choices=choices_dict['Mood Swing'])
+    suicidal_thoughts = models.CharField(max_length=100, choices=choices_dict['Suicidal thoughts'])
+    anorxia = models.CharField(max_length=100, choices=choices_dict['Anorxia'])
+    authority_respect = models.CharField(max_length=100, choices=choices_dict['Authority Respect'])
+    try_explanation = models.CharField(max_length=100, choices=choices_dict['Try-Explanation'])
+    aggressive_response = models.CharField(max_length=100, choices=choices_dict['Aggressive Response'])
+    ignore_moveon = models.CharField(max_length=100, choices=choices_dict['Ignore & Move-On'])
+    nervous_breakdown = models.CharField(max_length=100, choices=choices_dict['Nervous Break-down'])
+    admit_mistakes = models.CharField(max_length=100, choices=choices_dict['Admit Mistakes'])
+    overthink = models.CharField(max_length=100, choices=choices_dict['Overthinking'])
+    sexual_activity = models.CharField(max_length=100, choices=choices_dict['Sexual Activity'])
+    concentration = models.CharField(max_length=100, choices=choices_dict['Concentration'])
+    optimisim = models.CharField(max_length=100, choices=choices_dict['Optimisim'])
+
