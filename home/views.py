@@ -167,3 +167,21 @@ def doctor_login(request):
     return render(request, 'doctor_login.html')
 
 
+@login_required
+def complete_profile(request):
+    if UserProfile.objects.filter(user=request.user).exists():
+        # If profile exists, redirect to the dashboard profile page
+        return redirect('dashboard')
+    
+    if request.method == 'POST':
+        user_profile = UserProfile.objects.create(
+            user=request.user,
+            dob=request.POST['dob'],
+            gender=request.POST['gender'],
+            height=request.POST['height'],
+            weight=request.POST['weight'],
+            profession=request.POST['profession']
+        )
+        return redirect('dashboard')
+    return render(request, 'profile.html', {'user_name': request.user.first_name + " " + request.user.last_name})
+
