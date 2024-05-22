@@ -482,5 +482,8 @@ def download_receipt(request):
 def appointment_success(request):
     return render(request, 'appointment_success.html')
 
-
+@login_required
+def user_logout(request):
+    logout(request)
+    return redirect('login')
 
