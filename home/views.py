@@ -478,5 +478,9 @@ def download_receipt(request):
     # Logic to generate/download receipt file
     return redirect('dashboard')  # Redirect to dashboard or any other page
 
+@login_required
+def appointment_success(request):
+    return render(request, 'appointment_success.html')
+
 
 
