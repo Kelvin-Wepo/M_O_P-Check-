@@ -76,3 +76,30 @@ class mentalDisorder(models.Model):
     concentration = models.CharField(max_length=100, choices=choices_dict['Concentration'])
     optimisim = models.CharField(max_length=100, choices=choices_dict['Optimisim'])
 
+class pcosDisorder(models.Model):
+    BLOOD_GROUP_CHOICES = (
+        ('11', 'A+'),
+        ('12', 'A-'),
+        ('13', 'B+'),
+        ('14', 'B-'),
+        ('15', 'O+'),
+        ('16', 'O-'),
+        ('17', 'AB+'),
+        ('18', 'AB-'),
+    )
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    period_frequency = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(12)])
+    gained_weight = models.BooleanField(max_length = 10, choices = ((1, 'YES'), (0, 'NO')))
+    body_hair_growth = models.BooleanField(max_length = 10, choices = ((1, 'YES'), (0, 'NO')))
+    skin_dark = models.BooleanField(max_length = 10, choices = ((1, 'YES'), (0, 'NO')))
+    hair_problem = models.BooleanField(max_length = 10, choices = ((1, 'YES'), (0, 'NO')))
+    pimples = models.BooleanField(max_length = 10, choices = ((1, 'YES'), (0, 'NO')))
+    fast_food = models.BooleanField(max_length = 10, choices = ((1, 'YES'), (0, 'NO')))
+    exercise = models.BooleanField(max_length = 10, choices = ((1, 'YES'), (0, 'NO')))
+    mood_swing = models.BooleanField(max_length = 10, choices = ((1, 'YES'), (0, 'NO')))
+    mentrual_regularity = models.BooleanField(max_length = 10, choices = ((1, 'YES'), (0, 'NO')))
+    duration = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(31)])
+    blood_grp = models.CharField(max_length=100, choices=BLOOD_GROUP_CHOICES)
+
+
