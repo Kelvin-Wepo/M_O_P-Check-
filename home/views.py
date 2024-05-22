@@ -303,4 +303,3 @@ def mental_disorder(request):
 obesity_encoder = joblib.load('static/encoders/obesity_encoder.pkl')
 obesity_output_encoder = joblib.load('static/encoders/obesity_output_encoder.pkl')
 obesity_model = joblib.load('static/models/obesity_prediction.pkl')
-
