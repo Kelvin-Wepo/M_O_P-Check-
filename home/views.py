@@ -203,3 +203,7 @@ def doctor_dashboard(request):
     return render(request, 'doctor_dashboard.html', {'doctor': doctor_detail, 'user_name': request.user.first_name + " " + request.user.last_name})
 
 
+@login_required
+def health_prediction(request):
+    return render(request, 'health_test.html', {'user_name': request.user.first_name + " " + request.user.last_name})
+
