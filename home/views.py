@@ -149,3 +149,21 @@ def user_login(request):
     return render(request, 'login.html')
 
 
+def doctor_login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        phone = request.POST.get('phone')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            try:
+                if DoctorUser.objects.get(username = user.username).phone == phone:
+                    login(request, user)
+                    return redirect('doctor_dashboard')
+            except:
+                messages.error(request, "Something went wrong. Try again!")
+        else:
+            messages.error(request, "Something went wrong. Try again!")
+    return render(request, 'doctor_login.html')
+
+
