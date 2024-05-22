@@ -228,3 +228,9 @@ def appointmentHistory(request):
     appointment = AppointmentData.objects.filter(user=request.user)
     return render(request, 'appointment_history.html', {'user_name': request.user.first_name + " " + request.user.last_name, 'appointment': appointment})
 
+def update_status(request, appointment_id):
+    appointment = AppointmentData.objects.get(pk=appointment_id)
+    appointment.status = 'Scheduled'
+    appointment.save()
+    return redirect('appointmentRequest')
+
