@@ -406,4 +406,62 @@ def pcos(request):
         form = pcosDisorderForm()
     return render(request, 'pcos.html', {'age': age, 'height': user_data.height, 'weight': user_data.weight, 'form': form, 'user_name': request.user.first_name + " " + request.user.last_name})
 
+@login_required
+def report(request):
+    user_data = userHistory.objects.last()
+    
+    user_info = {}
+    user_info['test_type'] = user_data.test_type
+    user_info['result'] = user_data.result
+    user_info['date'] = user_data.date
+    
+    user_profile = UserProfile.objects.get(user=user_data.user)
+
+    user_info['dob']= user_profile.dob
+    user_info['gender'] = user_profile.gender
+    user_info['height'] = user_profile.height
+    user_info['weight'] = user_profile.weight
+    user_info['profession'] = user_profile.profession
+    
+    given_list = user_data.get_symptoms()
+    
+    if user_data.test_type == 'Mental Disorder Test':
+        attributes = mental_disorder_df.columns[1:]
+    
+    elif user_data.test_type == 'PCOS Test':
+        attributes = ['Period Frequency', 'Gained Weight', 'Excessive body/facial hair growth',
+                    'Noticed skin darkening', 'Hair Loss/ Hair Thinning/ Baldness', 'Pimples/Acne',
+                    'Fast Food Consumption', 'Exercise Regularity', 'Mood Swings', 'Menstrual Regularity',
+                    'Duration of Menstrual Periods', 'Blood Group']
+    
+    elif user_data.test_type == 'Obesity Test':
+        attributes = ['Activity Level (1-4)']
+    
+    attributes_values = {}
+    for i in range(len(given_list)):
+        attributes_values[attributes[i]] = given_list[i]
+    
+    if user_data.test_type == 'Mental Disorder Test':
+        advice = {
+            'Bipolar Type-2': "A comprehensive treatment plan combining mood stabilizers, therapy, and lifestyle adjustments is key to managing the cyclical nature of bipolar type-2 disorder. Regular monitoring and open communication with healthcare providers are essential for maintaining stability.",
+            "Depression": "Effective treatment for depression often involves a combination of therapy and medication tailored to individual needs. Engaging in regular physical activity, maintaining a healthy lifestyle, and seeking support from loved ones can also play a crucial role in managing symptoms.",
+            "Bipolar Type-1": "Treatment for bipolar type-1 typically involves mood stabilizers, antipsychotic medications, and psychotherapy. Developing coping strategies, adhering to medication regimens, and fostering a strong support network are vital for stabilizing mood swings and preventing relapses.",
+            "Normal": "For individuals experiencing normal fluctuations in mood, maintaining a balanced lifestyle, practicing stress management techniques, and prioritizing self-care activities such as adequate sleep, healthy eating, and regular exercise can contribute to overall well-being and resilience."
+        }
+    
+    elif user_data.test_type == 'PCOS Test':
+        advice = {'PCOS Positive': "Implement healthy habits like balanced eating, regular exercise, and stress management to alleviate symptoms and improve overall well-being.",
+                'PCOS Negative': "Maintain a balanced lifestyle including nutritious eating and regular exercise to support overall health and potentially reduce the risk of developing PCOS-related symptoms."}
+    
+    elif user_data.test_type == 'Obesity Test':
+        advice = {
+            'Normal weight': 'Maintain your healthy lifestyle habits, including balanced nutrition and regular exercise, to support overall well-being.',
+            'Obese': 'Seek professional guidance to develop a personalized weight management plan focusing on sustainable changes in diet and physical activity.',
+            'Overweight': 'Implement small, gradual changes such as portion control and incorporating more fruits and vegetables into your diet to achieve a healthier weight.',
+            'Underweight': 'Consult with a healthcare provider to identify potential underlying causes and develop a nutrition plan to reach and maintain a healthy weight.'
+        }
+    
+    user_info['advice'] = advice[user_data.result]
+    
+    return render(request, 'report.html', {'user_info': user_info, 'attributes_values': attributes_values, 'user_name': request.user.first_name + " " + request.user.last_name})
 
