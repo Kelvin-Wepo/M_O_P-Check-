@@ -406,6 +406,7 @@ def pcos(request):
         form = pcosDisorderForm()
     return render(request, 'pcos.html', {'age': age, 'height': user_data.height, 'weight': user_data.weight, 'form': form, 'user_name': request.user.first_name + " " + request.user.last_name})
 
+
 @login_required
 def report(request):
     user_data = userHistory.objects.last()
@@ -489,5 +490,4 @@ def user_logout(request):
 
 def index(request):
     return render(request, 'index.html')
-
 
