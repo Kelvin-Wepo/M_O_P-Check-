@@ -7,6 +7,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import Group, Permission
 from django.utils.translation import gettext as _
 
+
 mental_disorder_df = pd.read_csv('static/mentalDisorder.csv')
 
 
@@ -120,6 +121,7 @@ class ObesityData(models.Model):
         return self.ObesityCategory
 
 
+
 class DoctorUser(AbstractUser):
     phone = models.CharField(max_length=20)
     specialization = models.CharField(max_length=100)
@@ -165,4 +167,3 @@ class AppointmentData(models.Model):
     appointmentDate = models.DateTimeField()
     message = models.CharField(max_length = 1000)
     status = models.CharField(max_length = 50, default = "Pending")
-
