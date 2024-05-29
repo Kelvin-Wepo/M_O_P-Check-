@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load static %}
+
 {%block title%}HOME{%endblock title%}
 
 {%block body%}
@@ -8,11 +10,20 @@
     html {
         overflow-x: hidden;
     }
+
+    .jumbotron {
+        background-image: url("{% static 'https://images.app.goo.gl/wA5ig7VxrJDcCfFx8' %}");
+        background-size: cover;
+        background-position: center;
+        color: white;  /* Adjust text color to contrast with background */
+    }
+
 </style>
 
 <div class="container my-4">
     <main role="main">
-        <section class="jumbotron text-center my-5 bg-white">
+        <section class="jumbotron text-center my-5" >
+            
             <div class="container">
                 <h1 class="jumbotron-heading"><b>WELCOME TO <span class="text-info">M.O.P HEALTH PREDICTION</span></b>
                 </h1>
@@ -31,7 +42,7 @@
     </main>
     <hr>
 
-    <div class="row my-5 bg-white">
+    <div class="row my-5 ">
         <div class="col-md-4 p-5">
             <h2 class="text-muted">Take Online Test</h2><br>
             <p class="lead">Engage in online assessments tailored to your health concerns, providing valuable insights and guidance for optimizing your overall health and lifestyle.</p>
@@ -48,7 +59,7 @@
     <hr>
 
     <main role="main">
-        <section class="jumbotron text-center my-5 bg-white">
+        <section class="jumbotron text-center my-5 ">
             <div class="container">
                 <h1 class="jumbotron-heading">Are you a Doctor?</h1>
                 <p class="lead text-muted py-2">
