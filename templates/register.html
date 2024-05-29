@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load static %}
+
 {%block title%}User Registration{%endblock title%}
 
 {%block body%}
@@ -9,7 +11,11 @@
             <h1 style="text-align: center;">REGISTRATION</h1>
             <p style="text-align: center;"><i>Welcome to Health Prediction application!</i></p>
             
-            <img src="/static/register.webp" style="width: 100%;" alt="Doctor">
+            
+
+    <img src="{% static 'images/registration.webp' %}" style="width:350px; height: auto;" >
+        
+
             <br><br>
             <p><b>Benifits of Registration</b></p>
             <ul>
