@@ -16,7 +16,7 @@ from django import forms
 
 import pandas as pd
 import joblib
-import tensorflow as tf
+#import tensorflow as tf
 import numpy as np
 from django.utils import timezone
 import json
